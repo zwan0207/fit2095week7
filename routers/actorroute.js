@@ -6,7 +6,8 @@ const Movie = require('../models/movie');
 module.exports = {
 
     getAll: function (req, res) {
-        Actor.find(function (err, actors) {
+        Actor.find({}).populate('movies')
+        .exec(function (err, actors) {
             if (err) {
                 return res.status(404).json(err);
             } else {
@@ -54,6 +55,29 @@ module.exports = {
         });
     },
 
+    
+
+    deleteMovie: function (req,res) {
+        Actor.findOne({_id: req.params.aId}, function (err,actor) {
+            if (err) return res.status(400).json(err);
+            if (!actor) return res.status(404).json();
+            
+            Movie.findOne({ _id: req.params.mId }, function (err, movie) {
+                if (err) return res.status(400).json(err);
+                if (!movie) return res.status(404).json();
+
+                actor.movies.remove(movie._id);
+                actor.save(function (err) {
+                    if (err) return res.status(500).json(err);
+
+                    res.json(actor);
+                });
+            })
+            
+        })
+    },
+
+
 
     addMovie: function (req, res) {
         Actor.findOne({ _id: req.params.id }, function (err, actor) {
@@ -72,5 +96,31 @@ module.exports = {
                 });
             })
         });
-    }
+    },
+
+    deleteactor: function (req,res) {
+        Actor.findOne({_id: req.params.id}, function (err,actor) {
+            if (err) return res.status(400).json(err);
+            if (!actor) return res.status(404).json();
+            
+            Movie.deleteMany({_id:{$in:actor.movies}}, function(err,actor) {
+                if (err) return res.status(500).json(err);
+
+                    res.json(actor);
+            })
+
+            /*Movie.find({}, function (err, movie) {
+                if (err) return res.status(400).json(err);
+                if (!movie) return res.status(404).json();
+
+                actor.movies.remove(movie._id);
+                actor.save(function (err) {
+                    if (err) return res.status(500).json(err);
+
+                    res.json(actor);
+                });
+            })*/
+            
+        })
+    },
 };

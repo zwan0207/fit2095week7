@@ -28,10 +28,14 @@ app.get('/actors/:id', actors.getOne);
 app.put('/actors/:id', actors.updateOne);
 app.post('/actors/:id/movies', actors.addMovie);
 app.delete('/actors/:id', actors.deleteOne);
-
+app.delete('/actors/:aId/:mId',actors.deleteMovie);
+app.delete('/deleteactors/:id',actors.deleteactor);
 
 //Movie RESTFul  endpoints
 app.get('/movies', movies.getAll);
 app.post('/movies', movies.createOne);
 app.get('/movies/:id', movies.getOne);
 app.put('/movies/:id', movies.updateOne);
+app.post('/movies/:id/actors', movies.addActor);
+app.delete('/movies/:mid/:aid',movies.deleteActor);
+app.get('/deletemovies/:year1/:year2',movies.deleteMovie);
