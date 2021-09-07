@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const actors = require('./routers/actor');
-const movies = require('./routers/movie');
+const actors = require('./routers/actorroute');
+const movies = require('./routers/movieroute');
 
 const app = express();
 
@@ -12,7 +12,7 @@ app.listen(8080);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-mongoose.connect('mongodb://localhost:27017/movies', function (err) {
+mongoose.connect('mongodb://localhost:27017/2095db', function (err) {
     if (err) {
         return console.log('Mongoose - connection error:', err);
     }
